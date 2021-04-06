@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    tools {
+        maven "Maven"
+    }
+    stages {
+        stage('checkout&build') {
+            steps {
+                sh "mvn package -f StudentWebServiceProject/pom.xml"
+            }
+        }
+        stage('manual approval') {
+            steps {
+                input "Do you want to deploy to staging environment ?"
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh "StudentWebServiceProject/target/StudentWebServiceProject-0.0.1-SNAPSHOT.war /var/lib/tomcat9/webapps/MyStudent.war"
+            }
+        }
+    }
+}
